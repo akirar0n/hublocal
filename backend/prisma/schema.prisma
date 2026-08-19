@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum TipoUsuario {
+  CLIENTE
+  TRABALHADOR
+}
+
+enum StatusServico {
+  ATIVO
+  PAUSADO
+}
+
+enum TipoProposta {
+  PADRAO
+  PERMUTA
+}
+
+enum StatusProposta {
+  PENDENTE
+  ACEITA
+  RECUSADA
+  EM_ANDAMENTO
+  CONCLUIDA
+  CANCELADA
+}
+
+model Usuario {
+  id         Int         @id @default(autoincrement())
+  nome       String
+  email      String      @unique
+  senha_hash String
+  cpf        String      @unique
+  telefone   String?
+  tipo       TipoUsuario
+  foto_url   String?
+  created_at DateTime    @default(now())
+  updated_at DateTime    @updatedAt
+
+  localizacao          Localizacao?
+  servicos             Servico[]
+  propostas_enviadas   Proposta[] @relation("PropostasCliente")
+  propostas_recebidas  Proposta[] @relation("PropostasTrabalhador")
+  avaliacoes_feitas    Avaliacao[] @relation("AvaliacoesCliente")
+  avaliacoes_recebidas Avaliacao[] @relation("AvaliacoesTrabalhador")
+
+  @@map("usuarios")
+}
+
+model Localizacao {
+  id             Int      @id @default(autoincrement())
+  usuario_id     Int      @unique
+  latitude       Float
+  longitude      Float
+  endereco_texto String?
+  cidade         String?
+  bairro         String?
+  cep            String?
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+
+  usuario Usuario @relation(fields: [usuario_id], references: [id], onDelete: Cascade)
+
+  @@map("localizacoes")
+}
+
+model Servico {
+  id             Int           @id @default(autoincrement())
+  trabalhador_id Int
+  titulo         String
+  descricao      String        @db.Text
+  categoria      String
+  orcamento_base Decimal       @db.Decimal(10, 2)
+  aceita_permuta Boolean       @default(false)
+  status         StatusServico @default(ATIVO)
+  created_at     DateTime      @default(now())
+  updated_at     DateTime      @updatedAt
+
+  trabalhador Usuario    @relation(fields: [trabalhador_id], references: [id], onDelete: Cascade)
+  propostas   Proposta[]
+
+  @@map("servicos")
+  @@index([trabalhador_id])
+  @@index([categoria])
+  @@index([status])
+}
+
+model Proposta {
+  id                Int            @id @default(autoincrement())
+  servico_id        Int
+  cliente_id        Int
+  trabalhador_id    Int
+  tipo_proposta     TipoProposta
+  descricao_permuta String?        @db.Text
+  valor_oferecido   Decimal?       @db.Decimal(10, 2)
+  status            StatusProposta @default(PENDENTE)
+  created_at        DateTime       @default(now())
+  updated_at        DateTime       @updatedAt
+
+  servico     Servico    @relation(fields: [servico_id], references: [id], onDelete: Cascade)
+  cliente     Usuario    @relation("PropostasCliente", fields: [cliente_id], references: [id], onDelete: Cascade)
+  trabalhador Usuario    @relation("PropostasTrabalhador", fields: [trabalhador_id], references: [id], onDelete: Cascade)
+  avaliacao   Avaliacao?
+
+  @@map("propostas")
+  @@index([cliente_id])
+  @@index([trabalhador_id])
+  @@index([status])
+}
+
+model Avaliacao {
+  id             Int      @id @default(autoincrement())
+  proposta_id    Int      @unique
+  cliente_id     Int
+  trabalhador_id Int
+  estrelas       Int
+  comentario     String?  @db.Text
+  data_avaliacao DateTime @default(now())
+
+  proposta    Proposta @relation(fields: [proposta_id], references: [id], onDelete: Cascade)
+  cliente     Usuario  @relation("AvaliacoesCliente", fields: [cliente_id], references: [id], onDelete: Cascade)
+  trabalhador Usuario  @relation("AvaliacoesTrabalhador", fields: [trabalhador_id], references: [id], onDelete: Cascade)
+
+  @@map("avaliacoes")
+  @@index([trabalhador_id])
+}

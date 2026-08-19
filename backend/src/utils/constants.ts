@@ -1,0 +1,10 @@
+export const MSG001 = "E-mail e/ou senha incorretos.";
+export const MSG002 = "Erro ao cadastrar: O e-mail ou CPF informado já está em uso.";
+export const MSG004 = "Usuário cadastrado com sucesso. Seja bem-vindo!";
+export const MSG005 = "A senha deve conter pelo menos 8 caracteres.";
+export const MSG006 = "Permissão de geolocalização negada.";
+export const MSG007 = "Atenção! Dados obrigatórios não informados (orçamento, categoria ou descrição).";
+export const MSG008 = "Serviço publicado com sucesso!";
+export const MSG009 = "Solicitação de orçamento enviada com sucesso. Aguarde o retorno.";
+export const MSG010 = "Solicitação de permuta enviada com sucesso. Aguarde o retorno.";
+export const MSG012 = "Avaliação registrada com sucesso!";

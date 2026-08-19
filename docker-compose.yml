@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: hublocal_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: hublocal
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - hublocal_net
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: hublocal_backend
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=mysql://root:root@db:3306/hublocal
+      - JWT_SECRET=super_secret_hublocal
+      - JWT_EXPIRES_IN=1d
+      - CORS_ORIGIN=*
+    depends_on:
+      - db
+    networks:
+      - hublocal_net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: hublocal_frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:3000/api
+    depends_on:
+      - backend
+    networks:
+      - hublocal_net
+
+volumes:
+  db_data:
+
+networks:
+  hublocal_net:
+    driver: bridge
