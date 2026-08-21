@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { MainLayout } from '../layouts/MainLayout';
@@ -9,7 +10,7 @@ import { MinhasPropostas } from '../pages/cliente/MinhasPropostas';
 import { MeusServicos } from '../pages/trabalhador/MeusServicos';
 import { PropostasRecebidas } from '../pages/trabalhador/PropostasRecebidas';
 
-const PrivateRoute = ({ children, role }: { children: JSX.Element, role?: 'CLIENTE' | 'TRABALHADOR' }) => {
+const PrivateRoute = ({ children, role }: { children: ReactNode, role?: 'CLIENTE' | 'TRABALHADOR' }) => {
   const { user, loading } = useAuth();
   
   if (loading) return <div>Carregando...</div>;
