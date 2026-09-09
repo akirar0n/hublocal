@@ -9,6 +9,7 @@ import { BuscaServicos } from '../pages/cliente/BuscaServicos';
 import { MinhasPropostas } from '../pages/cliente/MinhasPropostas';
 import { MeusServicos } from '../pages/trabalhador/MeusServicos';
 import { PropostasRecebidas } from '../pages/trabalhador/PropostasRecebidas';
+import { Perfil } from '../pages/Perfil';
 
 const PrivateRoute = ({ children, role }: { children: ReactNode, role?: 'CLIENTE' | 'TRABALHADOR' }) => {
   const { user, loading } = useAuth();
@@ -27,7 +28,6 @@ export const AppRoutes = () => {
       <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
       <Route path="/cadastro" element={<MainLayout><Cadastro /></MainLayout>} />
       
-      {/* Rotas Cliente */}
       <Route path="/cliente/busca" element={
         <PrivateRoute role="CLIENTE"><MainLayout><BuscaServicos /></MainLayout></PrivateRoute>
       } />
@@ -35,12 +35,15 @@ export const AppRoutes = () => {
         <PrivateRoute role="CLIENTE"><MainLayout><MinhasPropostas /></MainLayout></PrivateRoute>
       } />
 
-      {/* Rotas Trabalhador */}
       <Route path="/trabalhador/servicos" element={
         <PrivateRoute role="TRABALHADOR"><MainLayout><MeusServicos /></MainLayout></PrivateRoute>
       } />
       <Route path="/trabalhador/propostas" element={
         <PrivateRoute role="TRABALHADOR"><MainLayout><PropostasRecebidas /></MainLayout></PrivateRoute>
+      } />
+
+      <Route path="/perfil" element={
+        <PrivateRoute><MainLayout><Perfil /></MainLayout></PrivateRoute>
       } />
     </Routes>
   );

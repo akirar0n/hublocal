@@ -1,6 +1,6 @@
 # HubLocal 🚀
 
-A plataforma definitiva que conecta **clientes locais** a **trabalhadores autônomos e microempreendedores**. O HubLocal permite o cálculo de proximidade geográfica real entre a necessidade e o prestador, suporte à economia circular através de **Propostas de Permuta**, e um ciclo de vida de serviço transparente.
+A plataforma que conecta **clientes locais** a **trabalhadores autônomos e microempreendedores**. O HubLocal permite o cálculo de proximidade geográfica real entre a necessidade e o prestador, suporte à economia circular através de **Propostas de Permuta**, e um ciclo de vida de serviço transparente.
 
 ---
 
@@ -8,85 +8,68 @@ A plataforma definitiva que conecta **clientes locais** a **trabalhadores autôn
 
 ### Backend
 - **Node.js + Express** (API REST)
-- **TypeScript** (Tipagem forte)
-- **Prisma ORM** (Modelagem de Banco de Dados)
-- **MySQL 8+** (Persistência com suporte rápido a dados espaciais via Haversine no App)
-- **Zod** (Validação de schemas)
-- **JWT + bcrypt** (Autenticação Stateless Segura)
-- **Jest + Supertest** (Testes de integração)
+- **TypeScript**
+- **Prisma ORM**
+- **MySQL 8+** (Persistência com suporte a dados espaciais via Haversine)
+- **Zod** (Validação)
+- **JWT + bcrypt** (Autenticação)
+- **Jest + Supertest** (Testes)
 
 ### Frontend
-- **React + Vite** (Performance e HMR)
-- **React Router DOM** (Navegação baseada em funções `CLIENTE` e `TRABALHADOR`)
-- **React Bootstrap** (Design moderno, flexível e responsivo)
-- **Leaflet + React-Leaflet** (Mapas interativos e geolocalização por navegador)
+- **React + Vite**
+- **React Router DOM**
+- **React Bootstrap**
+- **Leaflet + React-Leaflet** (Mapas interativos)
 - **Axios** (Integração com API)
 
 ---
 
-## 📂 Estrutura de Pastas (Monorepo Simulado)
+## 📂 Estrutura do Projeto
 ```text
 /hublocal
   ├── backend/           # API e Banco de dados
-  │   ├── prisma/        # Schema e Seed (População de dados)
-  │   ├── src/           # Controllers, Services, Middlewares
-  │   ├── package.json
-  │   └── .env.example
-  ├── frontend/          # Single Page Application
-  │   ├── src/           # Componentes, Páginas, AuthContext
-  │   ├── package.json
-  │   └── .env.example
-  ├── docker-compose.yml # Orquestração completa
+  ├── frontend/          # Single Page Application (React)
+  ├── docker-compose.yml # Orquestração dos serviços
   └── README.md
 ```
 
 ---
 
-## ⚙️ Configurações Iniciais
+## ⚙️ Como Executar
 
-Você pode executar o projeto **via Docker** ou **Localmente**.
-
-### Opção 1: Via Docker (Mais fácil)
-1. Crie os seguintes arquivos `Dockerfile` dentro da pasta `backend` e `frontend` respectivamente (ou simplesmente utilize Node local caso não queira buildar as imagens customizadas).
-2. Na raiz do projeto, execute:
+### Via Docker
+Na raiz do projeto, execute:
 ```bash
 docker-compose up -d --build
 ```
-Isso subirá o MySQL na porta 3306, o Backend na porta 3000 e o Frontend na porta 5173.
+Isso iniciará o MySQL, o Backend na porta 3000 e o Frontend na porta 5173.
 
+### Localmente (Sem Docker)
 
-### Opção 2: Localmente (Sem Docker)
+#### 1. Banco de Dados
+Certifique-se de ter o MySQL 8+ rodando localmente.
 
-#### 1. Banco de Dados (MySQL)
-Garanta que você possua o MySQL 8+ rodando localmente na porta `3306` com o usuário `root` (sem senha, ou com a senha mapeada no seu `.env`).
-
-#### 2. Configurando o Backend
+#### 2. Backend
 ```bash
 cd backend
 npm install
 ```
-Copie o arquivo `.env.example` para `.env` e ajuste as credenciais se necessário:
+Configure o `.env` copiando o `.env.example`:
 ```env
 DATABASE_URL="mysql://root:@localhost:3306/hublocal"
 ```
-
-Execute as migrations e popule o banco (Seed):
+Rode as migrations e inicie:
 ```bash
-npx prisma migrate dev --name init
-```
-O Seed criará 2 clientes, 5 trabalhadores e 8 serviços para você testar!
-
-Inicie o backend:
-```bash
+npx prisma migrate dev
 npm run dev
 ```
 
-#### 3. Configurando o Frontend
+#### 3. Frontend
 ```bash
 cd frontend
 npm install
 ```
-Copie o arquivo `.env.example` para `.env` e confirme a URL da API:
+Configure o `.env`:
 ```env
 VITE_API_URL="http://localhost:3000/api"
 ```
@@ -98,36 +81,21 @@ Acesse: `http://localhost:5173`
 
 ---
 
-## 🛡️ Segurança (Regras Implementadas)
-- O contato do Trabalhador e do Cliente (`telefone`/`whatsapp`) **nunca viaja pela rede** enquanto a proposta estiver no status `PENDENTE`.
-- Usuários autenticados como `CLIENTE` não conseguem acessar rotas de manipulação de serviços de `TRABALHADOR` (Middlewares de Role).
-- Propostas que não aceitam Permuta bloqueiam a criação de negociações do tipo `PERMUTA` diretamente na validação do Backend.
-- Senhas salvas com hash `bcrypt`. 
-- SQL Injections mitigados integralmente com consultas protegidas do Prisma Client.
+## 🛡️ Segurança
+- O contato de Trabalhador e Cliente nunca viaja pela rede enquanto a proposta estiver pendente.
+- Controle de acesso por Roles (Cliente e Trabalhador).
+- Senhas protegidas com bcrypt.
 
 ---
 
-## 🧪 Executando os Testes (Backend)
-No diretório `backend`, caso tenha instalado o Jest:
-```bash
-npm install -D jest ts-jest supertest @types/jest @types/supertest
-npx jest
-```
-*(No código entregue há exemplos das regras centrais testadas como Autenticação e Propostas).*
+## 📖 Endpoints Principais
 
----
-
-## 📖 Endpoints Principais da API REST
-
-| Rota | Método | Descrição | Roles |
+| Rota | Método | Descrição | Permissão |
 |---|---|---|---|
-| `/api/auth/register` | `POST` | Cria nova conta (Cliente ou Trabalhador). | Pública |
-| `/api/auth/login` | `POST` | Retorna o JWT. | Pública |
-| `/api/servicos` | `GET` | Busca com cálculo Haversine de distância. | Pública |
-| `/api/servicos` | `POST` | Cria serviço. | `TRABALHADOR` |
-| `/api/propostas` | `POST` | Envia proposta financeira ou permuta. | `CLIENTE` |
-| `/api/propostas/:id/aceitar`| `PATCH`| Aceita Proposta e Libera Contato. | `TRABALHADOR` |
-| `/api/avaliacoes` | `POST` | Avalia um serviço (Somente p/ status Concluído). | `CLIENTE` |
-
----
-**HubLocal** — Conectando habilidades vizinhas! 🤝
+| `/api/auth/register` | `POST` | Cadastro (Cliente ou Trabalhador) | Público |
+| `/api/auth/login` | `POST` | Login | Público |
+| `/api/servicos` | `GET` | Busca por proximidade | Público |
+| `/api/servicos` | `POST` | Criação de serviço | `TRABALHADOR` |
+| `/api/propostas` | `POST` | Enviar proposta | `CLIENTE` |
+| `/api/propostas/:id/aceitar`| `PATCH`| Aceitar proposta | `TRABALHADOR` |
+| `/api/avaliacoes` | `POST` | Avaliar serviço | `CLIENTE` |

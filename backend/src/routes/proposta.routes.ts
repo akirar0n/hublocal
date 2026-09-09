@@ -13,10 +13,8 @@ router.get('/', propostaController.getMyPropostas);
 router.get('/:id', validate(propostaIdSchema), propostaController.getById);
 router.patch('/:id/cancelar', validate(propostaIdSchema), propostaController.cancelar);
 
-// Apenas CLIENTE
 router.post('/', requireRole('CLIENTE'), validate(createPropostaSchema), propostaController.create);
 
-// Apenas TRABALHADOR
 router.patch('/:id/aceitar', requireRole('TRABALHADOR'), validate(propostaIdSchema), propostaController.aceitar);
 router.patch('/:id/recusar', requireRole('TRABALHADOR'), validate(propostaIdSchema), propostaController.recusar);
 router.patch('/:id/iniciar', requireRole('TRABALHADOR'), validate(propostaIdSchema), propostaController.iniciar);

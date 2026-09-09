@@ -59,10 +59,8 @@ export class ServicoService {
     const servico = await servicoRepo.findById(id);
     if (!servico) throw new AppError('Serviço não encontrado', 404, 'NOT_FOUND');
     
-    // Ocultar dados sensíveis
     const { senha_hash, cpf, ...trabalhadorSafe } = servico.trabalhador;
     
-    // Ocultar telefone/whatsapp no serviço puro (só libera na proposta)
     trabalhadorSafe.telefone = null;
     
     return { ...servico, trabalhador: trabalhadorSafe };
@@ -71,12 +69,10 @@ export class ServicoService {
   async search(query: any) {
     let servicos = await servicoRepo.findAllAtivos();
 
-    // Filtro por Categoria
     if (query.categoria) {
       servicos = servicos.filter(s => s.categoria.toLowerCase() === String(query.categoria).toLowerCase());
     }
 
-    // Filtro de Preço
     if (query.precoMin) {
       servicos = servicos.filter(s => Number(s.orcamento_base) >= Number(query.precoMin));
     }
@@ -88,7 +84,6 @@ export class ServicoService {
       const { senha_hash, cpf, telefone, ...trabSafe } = s.trabalhador;
       let distanciaKm = null;
 
-      // Calcular distância se o cliente enviou latitude/longitude
       if (query.latitude && query.longitude && trabSafe.localizacao) {
         distanciaKm = calcularDistanciaHaversine(
           Number(query.latitude),
@@ -110,13 +105,11 @@ export class ServicoService {
       };
     });
 
-    // Filtro por Raio
     if (query.raio && query.latitude && query.longitude) {
       const raio = Number(query.raio);
       resultados = resultados.filter(s => s.distanciaKm !== null && s.distanciaKm <= raio);
     }
 
-    // Ordenar pela menor distância
     resultados.sort((a, b) => {
       if (a.distanciaKm === null) return 1;
       if (b.distanciaKm === null) return -1;

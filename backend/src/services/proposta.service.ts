@@ -41,7 +41,6 @@ export class PropostaService {
       propostas = await propostaRepo.findByTrabalhadorId(usuario_id);
     }
 
-    // Regra: Esconder telefone se a proposta não estiver aceita/andamento/concluida
     return propostas.map(p => {
       const isAprovada = ['ACEITA', 'EM_ANDAMENTO', 'CONCLUIDA'].includes(p.status);
       
@@ -77,7 +76,6 @@ export class PropostaService {
     return p;
   }
 
-  // Máquina de Estados
   private transicaoValida(atual: StatusProposta, novo: StatusProposta): boolean {
     const transicoes = {
       [StatusProposta.PENDENTE]: [StatusProposta.ACEITA, StatusProposta.RECUSADA, StatusProposta.CANCELADA],
@@ -95,7 +93,6 @@ export class PropostaService {
     const p = await propostaRepo.findById(id);
     if (!p) throw new AppError('Proposta não encontrada', 404, 'NOT_FOUND');
 
-    // Validação de ownership e regras de transição baseadas em quem solicita
     if (novoStatus === StatusProposta.ACEITA || novoStatus === StatusProposta.RECUSADA) {
       if (tipo_usuario !== 'TRABALHADOR' || p.trabalhador_id !== usuario_id) {
         throw new AppError('Apenas o trabalhador pode aceitar/recusar', 403, 'FORBIDDEN');

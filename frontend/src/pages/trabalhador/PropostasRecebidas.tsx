@@ -75,7 +75,6 @@ export const PropostasRecebidas = () => {
                       </p>
                     )}
 
-                    {/* O contato só aparece se aceita, em andamento ou concluida (regra do backend) */}
                     {p.cliente?.telefone && (
                       <div className="d-flex align-items-center gap-2 p-2 mt-2 mb-2" style={{ background: '#e2f3e9', borderRadius: 8, color: '#1f6b41' }}>
                         <i className="bi bi-telephone-fill" />

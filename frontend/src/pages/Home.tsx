@@ -34,13 +34,11 @@ const HeroGraphic = () => (
     <circle cx="210" cy="190" r="130" fill="none" stroke="#ffffff" strokeOpacity="0.18" strokeDasharray="3 7" />
     <circle cx="210" cy="190" r="80" fill="none" stroke="#ffffff" strokeOpacity="0.14" strokeDasharray="3 7" />
 
-    {/* connective routes */}
     <path d="M 210 190 L 120 110" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2" />
     <path d="M 210 190 L 320 130" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2" />
     <path d="M 210 190 L 140 280" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2" />
     <path d="M 210 190 L 300 270" stroke="#ffffff" strokeOpacity="0.35" strokeWidth="2" />
 
-    {/* satellite pins (profissionais) */}
     {[
       [120, 110],
       [320, 130],
@@ -53,7 +51,6 @@ const HeroGraphic = () => (
       </g>
     ))}
 
-    {/* central pin (você) */}
     <g transform="translate(210 190)">
       <circle r="34" fill="url(#hlPinGrad)" />
       <path
@@ -74,7 +71,6 @@ export const Home = () => {
 
   return (
     <div className="hl-fade-in">
-      {/* Hero */}
       <div
         className="p-4 p-md-5 mb-5"
         style={{
@@ -114,7 +110,6 @@ export const Home = () => {
         </Row>
       </div>
 
-      {/* Pillars */}
       <div className="hl-section-title">
         <div>
           <h2>Como funciona</h2>
@@ -138,7 +133,6 @@ export const Home = () => {
         ))}
       </Row>
 
-      {/* Dual CTA */}
       <Row className="g-4">
         <Col md={6}>
           <div className="h-100 p-4" style={{ background: 'var(--hl-pine-100)', borderRadius: 'var(--hl-radius)' }}>

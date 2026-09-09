@@ -10,7 +10,6 @@ const usuarioRepo = new UsuarioRepository();
 
 export class AuthService {
   async register(data: any) {
-    // Verificar duplicatas
     const [existEmail, existCpf] = await Promise.all([
       usuarioRepo.findByEmail(data.email),
       usuarioRepo.findByCpf(data.cpf)

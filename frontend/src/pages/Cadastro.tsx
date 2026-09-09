@@ -71,7 +71,6 @@ export const Cadastro = () => {
           {success && <Alert variant="success" className="hl-alert py-2">{success}</Alert>}
 
           <Form onSubmit={handleSubmit}>
-            {/* Perfil */}
             <SectionLabel icon="bi-person-badge">Que tipo de conta você quer criar?</SectionLabel>
             <Row className="g-3 mb-4">
               {[
@@ -106,7 +105,6 @@ export const Cadastro = () => {
               ))}
             </Row>
 
-            {/* Dados pessoais */}
             <SectionLabel icon="bi-card-text">Dados pessoais</SectionLabel>
             <Row>
               <Col md={6}>
@@ -141,7 +139,6 @@ export const Cadastro = () => {
               </Col>
             </Row>
 
-            {/* Localização */}
             <SectionLabel icon="bi-geo-alt">Sua localização</SectionLabel>
             <div
               className="d-flex flex-wrap align-items-center justify-content-between gap-3 p-3 mb-3"

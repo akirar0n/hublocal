@@ -97,16 +97,19 @@ export const MainLayout = ({ children }: { children: ReactNode }) => {
                     />
                     <span className="text-white d-none d-lg-inline">{user.nome.split(' ')[0]}</span>
                   </Dropdown.Toggle>
-                  <Dropdown.Menu className="shadow border-0" style={{ borderRadius: 12, minWidth: 200 }}>
-                    <div className="px-3 py-2">
-                      <div className="fw-semibold" style={{ color: 'var(--hl-pine-900)' }}>{user.nome}</div>
-                      <div className="small text-muted text-truncate">{user.email}</div>
-                    </div>
-                    <Dropdown.Divider />
-                    <Dropdown.Item onClick={handleLogout} className="text-danger">
-                      <i className="bi bi-box-arrow-right me-2" /> Sair
-                    </Dropdown.Item>
-                  </Dropdown.Menu>
+                    <Dropdown.Menu className="shadow border-0" style={{ borderRadius: 12, minWidth: 200 }}>
+                      <div className="px-3 py-2">
+                        <div className="fw-semibold" style={{ color: 'var(--hl-pine-900)' }}>{user.nome}</div>
+                        <div className="small text-muted text-truncate">{user.email}</div>
+                      </div>
+                      <Dropdown.Divider />
+                      <Dropdown.Item as={Link} to="/perfil">
+                        <i className="bi bi-person-circle me-2" /> Meu Perfil
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={handleLogout} className="text-danger">
+                        <i className="bi bi-box-arrow-right me-2" /> Sair
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
                 </Dropdown>
               ) : (
                 <div className="d-flex align-items-center gap-2 mt-3 mt-lg-0">

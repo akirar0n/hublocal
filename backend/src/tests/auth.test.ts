@@ -31,7 +31,7 @@ describe('AuthService - Regras de Negócio', () => {
   it('não deve permitir cadastro com e-mail duplicado', async () => {
     const data = {
       nome: 'Teste Clone',
-      email: 'teste@jest.com', // mesmo e-mail
+      email: 'teste@jest.com',
       senha: 'password123',
       cpf: '11122233344',
       tipo: 'CLIENTE'

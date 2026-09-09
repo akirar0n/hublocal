@@ -17,10 +17,6 @@ export const MeusServicos = () => {
 
   const carregarServicos = async () => {
     setLoading(true);
-    // Busca na vdd no endpoint /servicos filtrando pelo usuario,
-    // mas a API retorna todos na listagem com parametro, ou podemos pegar do array se necessario
-    // Por simplicidade, vamos usar o endpoint /servicos e filtrar os meus no frontend,
-    // embora no mundo ideal teriamos um /servicos/meus
     const res = await api.get('/servicos');
     const meus = res.data.data.filter((s: any) => s.trabalhador.id === user?.id);
     setServicos(meus);

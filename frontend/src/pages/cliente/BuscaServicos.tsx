@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Form, Modal } from 'react-bootstrap';
 import { api } from '../../services/api';
 import { ServiceMap } from '../../components/ServiceMap';
+import { AvaliacoesModal } from '../../components/AvaliacoesModal';
 
 export const BuscaServicos = () => {
   const [servicos, setServicos] = useState<any[]>([]);
@@ -18,6 +19,9 @@ export const BuscaServicos = () => {
   const [servicoSelecionado, setServicoSelecionado] = useState<any>(null);
   const [proposta, setProposta] = useState({ tipo: 'PADRAO', valor: '', permuta: '' });
   const [enviando, setEnviando] = useState(false);
+
+  const [showAvaliacoesModal, setShowAvaliacoesModal] = useState(false);
+  const [trabalhadorAvaliacaoId, setTrabalhadorAvaliacaoId] = useState<number | null>(null);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((pos) => {
@@ -76,6 +80,11 @@ export const BuscaServicos = () => {
     } finally {
       setEnviando(false);
     }
+  };
+
+  const abrirAvaliacoes = (trabalhadorId: number) => {
+    setTrabalhadorAvaliacaoId(trabalhadorId);
+    setShowAvaliacoesModal(true);
   };
 
   return (
@@ -158,7 +167,13 @@ export const BuscaServicos = () => {
                   <div className="d-flex align-items-center mb-3">
                     <img src={s.trabalhador.foto_url || `https://ui-avatars.com/api/?background=1B4B43&color=fff&name=${encodeURIComponent(s.trabalhador.nome)}`} alt={s.trabalhador.nome} className="hl-avatar me-3" width={48} height={48} />
                     <div>
-                      <h5 className="mb-0" style={{ fontSize: '1.02rem' }}>{s.trabalhador.nome}</h5>
+                      <div className="d-flex align-items-center gap-2 mb-0">
+                        <h5 className="mb-0" style={{ fontSize: '1.02rem' }}>{s.trabalhador.nome}</h5>
+                        <Button variant="link" size="sm" className="p-0 text-decoration-none d-flex align-items-center gap-1" onClick={() => abrirAvaliacoes(s.trabalhador.id)}>
+                          <i className="bi bi-star-fill text-warning"></i>
+                          <span className="small text-muted">Avaliações</span>
+                        </Button>
+                      </div>
                       <small className="text-muted">{s.categoria}</small>
                     </div>
                   </div>
@@ -239,6 +254,12 @@ export const BuscaServicos = () => {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      <AvaliacoesModal
+        show={showAvaliacoesModal}
+        onHide={() => setShowAvaliacoesModal(false)}
+        trabalhadorId={trabalhadorAvaliacaoId}
+      />
     </div>
   );
 };
