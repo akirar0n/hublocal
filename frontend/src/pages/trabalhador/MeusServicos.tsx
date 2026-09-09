@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Card, Button, Form, Modal } from 'react-bootstrap';
 import { api } from '../../services/api';
-import { useAuth } from '../../hooks/useAuth';
+import { AvaliacoesModal } from '../../components/AvaliacoesModal';
 
 export const MeusServicos = () => {
   const { user } = useAuth();
+
+  // Estado para abrir modal de avaliações do próprio trabalhador
+  const [showAvaliacoesModal, setShowAvaliacoesModal] = useState(false);
   const [servicos, setServicos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [show, setShow] = useState(false);
@@ -61,8 +64,8 @@ export const MeusServicos = () => {
           <h2>Meus Serviços</h2>
           <p>Seu portfólio de serviços publicados no HubLocal.</p>
         </div>
-        <Button variant="primary" onClick={() => setShow(true)}>
-          <i className="bi bi-plus-lg me-1" /> Novo Serviço
+        <Button variant="primary" onClick={() => setShowAvaliacoesModal(true)} className="ms-2">
+          <i className="bi bi-star-fill me-1" /> Ver Avaliações
         </Button>
       </div>
 
@@ -142,7 +145,11 @@ export const MeusServicos = () => {
             {salvando ? 'Publicando...' : 'Publicar Serviço'}
           </Button>
         </Modal.Footer>
-      </Modal>
+      <AvaliacoesModal
+        show={showAvaliacoesModal}
+        onHide={() => setShowAvaliacoesModal(false)}
+        trabalhadorId={user?.id ?? null}
+      />
     </div>
   );
 };
