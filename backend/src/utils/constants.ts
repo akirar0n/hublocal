@@ -8,3 +8,6 @@ export const MSG008 = "Serviço publicado com sucesso!";
 export const MSG009 = "Solicitação de orçamento enviada com sucesso. Aguarde o retorno.";
 export const MSG010 = "Solicitação de permuta enviada com sucesso. Aguarde o retorno.";
 export const MSG012 = "Avaliação registrada com sucesso!";
+export const MSG013 = "Se este e-mail estiver cadastrado, as instruções para redefinir a senha foram enviadas.";
+export const MSG014 = "Senha redefinida com sucesso! Você já pode entrar com a nova senha.";
+export const MSG015 = "Link de recuperação inválido ou expirado. Por favor, solicite um novo link.";

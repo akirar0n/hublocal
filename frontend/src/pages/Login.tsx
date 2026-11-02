@@ -77,7 +77,16 @@ export const Login = () => {
               />
             </Form.Group>
             <Form.Group className="mb-4">
-              <Form.Label>Senha</Form.Label>
+              <div className="d-flex justify-content-between align-items-center mb-1">
+                <Form.Label className="mb-0">Senha</Form.Label>
+                <Link
+                  to="/esqueci-senha"
+                  className="small text-decoration-none"
+                  style={{ color: 'var(--hl-pine-700)', fontWeight: 500 }}
+                >
+                  Esqueceu a senha?
+                </Link>
+              </div>
               <Form.Control
                 type="password"
                 placeholder="••••••••"

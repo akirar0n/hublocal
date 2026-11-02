@@ -94,6 +94,8 @@ Acesse: `http://localhost:5173`
 |---|---|---|---|
 | `/api/auth/register` | `POST` | Cadastro (Cliente ou Trabalhador) | Público |
 | `/api/auth/login` | `POST` | Login | Público |
+| `/api/auth/forgot-password` | `POST` | Solicitar recuperação de senha | Público |
+| `/api/auth/reset-password` | `POST` | Redefinir senha com token | Público |
 | `/api/servicos` | `GET` | Busca por proximidade | Público |
 | `/api/servicos` | `POST` | Criação de serviço | `TRABALHADOR` |
 | `/api/propostas` | `POST` | Enviar proposta | `CLIENTE` |

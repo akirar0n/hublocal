@@ -39,4 +39,25 @@ describe('AuthService - Regras de Negócio', () => {
 
     await expect(authService.register(data)).rejects.toThrow('O e-mail ou CPF informado já está em uso.');
   });
+
+  it('deve gerar link e token de recuperação para e-mail cadastrado', async () => {
+    const res = await authService.forgotPassword('teste@jest.com');
+    expect(res.message).toBeDefined();
+    expect(res.token).toBeDefined();
+    expect(res.devResetUrl).toContain('/redefinir-senha?token=');
+  });
+
+  it('deve redefinir a senha com token válido e permitir novo login', async () => {
+    const forgotRes = await authService.forgotPassword('teste@jest.com');
+    const resetRes = await authService.resetPassword(forgotRes.token!, 'novasenha456');
+    expect(resetRes.message).toBeDefined();
+
+    // Login com a nova senha deve funcionar
+    const loginRes = await authService.login('teste@jest.com', 'novasenha456');
+    expect(loginRes.token).toBeDefined();
+
+    // Token antigo não deve mais funcionar pois o hash mudou
+    await expect(authService.resetPassword(forgotRes.token!, 'outrasenha789')).rejects.toThrow();
+  });
 });
+

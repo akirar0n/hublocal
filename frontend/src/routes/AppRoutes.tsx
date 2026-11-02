@@ -5,6 +5,8 @@ import { MainLayout } from '../layouts/MainLayout';
 import { Home } from '../pages/Home';
 import { Login } from '../pages/Login';
 import { Cadastro } from '../pages/Cadastro';
+import { EsqueciSenha } from '../pages/EsqueciSenha';
+import { RedefinirSenha } from '../pages/RedefinirSenha';
 import { BuscaServicos } from '../pages/cliente/BuscaServicos';
 import { MinhasPropostas } from '../pages/cliente/MinhasPropostas';
 import { MeusServicos } from '../pages/trabalhador/MeusServicos';
@@ -27,6 +29,8 @@ export const AppRoutes = () => {
       <Route path="/" element={<MainLayout><Home /></MainLayout>} />
       <Route path="/login" element={<MainLayout><Login /></MainLayout>} />
       <Route path="/cadastro" element={<MainLayout><Cadastro /></MainLayout>} />
+      <Route path="/esqueci-senha" element={<MainLayout><EsqueciSenha /></MainLayout>} />
+      <Route path="/redefinir-senha" element={<MainLayout><RedefinirSenha /></MainLayout>} />
       
       <Route path="/cliente/busca" element={
         <PrivateRoute role="CLIENTE"><MainLayout><BuscaServicos /></MainLayout></PrivateRoute>
