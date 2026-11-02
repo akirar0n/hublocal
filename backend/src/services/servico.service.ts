@@ -66,6 +66,23 @@ export class ServicoService {
     return { ...servico, trabalhador: trabalhadorSafe };
   }
 
+  async findByTrabalhador(trabalhador_id: number) {
+    const servicos = await servicoRepo.findByTrabalhador(trabalhador_id);
+    return servicos.map(s => {
+      const { senha_hash, cpf, telefone, ...trabSafe } = s.trabalhador;
+      return {
+        id: s.id,
+        titulo: s.titulo,
+        categoria: s.categoria,
+        descricao: s.descricao,
+        orcamentoBase: s.orcamento_base,
+        aceita_permuta: s.aceita_permuta,
+        status: s.status,
+        trabalhador: trabSafe
+      };
+    });
+  }
+
   async search(query: any) {
     let servicos = await servicoRepo.findAllAtivos();
 

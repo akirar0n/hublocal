@@ -9,6 +9,6 @@
     "strict": true,
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "prisma/seed.ts", "src/**/*.json"],
+  "include": ["src/**/*", "src/**/*.json"],
   "exclude": ["node_modules", "dist"]
 }

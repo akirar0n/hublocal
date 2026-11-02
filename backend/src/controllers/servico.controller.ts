@@ -64,6 +64,20 @@ export class ServicoController {
     }
   }
 
+  async findMeus(req: Request, res: Response, next: NextFunction) {
+    try {
+      const trabalhadorId = req.user!.id;
+      const servicos = await servicoService.findByTrabalhador(trabalhadorId);
+      return res.status(200).json({
+        success: true,
+        data: servicos
+      });
+    } catch (error) {
+      console.error('[findMeus] ERRO DETALHADO:', error);
+      next(error);
+    }
+  }
+
   async getById(req: Request, res: Response, next: NextFunction) {
     try {
       const id = parseInt(req.params.id, 10);

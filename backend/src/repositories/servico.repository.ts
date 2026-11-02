@@ -37,6 +37,17 @@ export class ServicoRepository {
     });
   }
 
+  async findByTrabalhador(trabalhador_id: number) {
+    return prisma.servico.findMany({
+      where: { trabalhador_id },
+      include: {
+        trabalhador: {
+          include: { localizacao: true }
+        }
+      }
+    });
+  }
+
   async delete(id: number) {
     return prisma.servico.delete({
       where: { id }

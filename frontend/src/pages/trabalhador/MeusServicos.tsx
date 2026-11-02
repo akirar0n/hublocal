@@ -11,6 +11,7 @@ export const MeusServicos = () => {
   const [showAvaliacoesModal, setShowAvaliacoesModal] = useState(false);
   const [servicos, setServicos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [erro, setErro] = useState<string | null>(null);
   const [show, setShow] = useState(false);
   const [salvando, setSalvando] = useState(false);
   const [form, setForm] = useState({ titulo: '', descricao: '', categoria: '', orcamento_base: '', aceita_permuta: false });
@@ -20,11 +21,18 @@ export const MeusServicos = () => {
   }, [user]);
 
   const carregarServicos = async () => {
-    setLoading(true);
-    const res = await api.get('/servicos');
-    const meus = res.data.data.filter((s: any) => s.trabalhador.id === user?.id);
-    setServicos(meus);
-    setLoading(false);
+    try {
+      setLoading(true);
+      setErro(null);
+      const res = await api.get('/servicos/meus');
+      setServicos(res.data.data);
+    } catch (err: any) {
+      console.error(err);
+      const msg = err.response?.data?.message || err.message || 'Não foi possível conectar ao servidor.';
+      setErro(msg);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const salvar = async () => {
@@ -46,9 +54,14 @@ export const MeusServicos = () => {
   };
 
   const alternarStatus = async (s: any) => {
-    const novo = s.status === 'ATIVO' ? 'PAUSADO' : 'ATIVO';
-    await api.patch(`/servicos/${s.id}/status`, { status: novo });
-    carregarServicos();
+    try {
+      const novo = s.status === 'ATIVO' ? 'PAUSADO' : 'ATIVO';
+      await api.patch(`/servicos/${s.id}/status`, { status: novo });
+      carregarServicos();
+    } catch (err: any) {
+      alert(err.response?.data?.message || 'Erro ao alterar status. Verifique o console.');
+      console.error(err);
+    }
   };
 
   const excluir = async (id: number) => {
@@ -74,7 +87,19 @@ export const MeusServicos = () => {
       </div>
 
       {loading ? (
-        <div className="text-center py-5 text-muted">Carregando...</div>
+        <div className="text-center py-5 text-muted">
+          <div className="spinner-border spinner-border-sm me-2" role="status" />
+          Carregando seus serviços...
+        </div>
+      ) : erro ? (
+        <div className="hl-empty-state">
+          <i className="bi bi-wifi-off d-block fs-3 mb-2 text-danger" />
+          <h5 className="mb-1">Não foi possível carregar os serviços</h5>
+          <p className="mb-3 small text-muted">{erro}</p>
+          <Button variant="primary" size="sm" onClick={carregarServicos}>
+            <i className="bi bi-arrow-clockwise me-1" /> Tentar Novamente
+          </Button>
+        </div>
       ) : (
         <Row>
           {servicos.map(s => (

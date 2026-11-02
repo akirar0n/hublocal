@@ -8,6 +8,7 @@ const router = Router();
 const servicoController = new ServicoController();
 
 router.get('/', servicoController.search);
+router.get('/meus', authenticate, requireRole('TRABALHADOR'), servicoController.findMeus);
 router.get('/:id', servicoController.getById);
 
 router.use(authenticate);

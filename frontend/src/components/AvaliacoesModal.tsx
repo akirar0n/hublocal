@@ -84,9 +84,9 @@ export const AvaliacoesModal = ({ trabalhadorId, show, onHide }: AvaliacoesModal
                 {avaliacoes.map((av) => (
                   <div key={av.id} className="p-3 bg-white" style={{ border: '1px solid var(--hl-border-soft)', borderRadius: 'var(--hl-radius-sm)' }}>
                     <div className="d-flex justify-content-between align-items-start mb-2">
-                      <strong style={{ color: 'var(--hl-pine-900)' }}>{av.proposta.cliente.nome}</strong>
+                      <strong style={{ color: 'var(--hl-pine-900)' }}>{av?.cliente?.nome || av?.proposta?.cliente?.nome || 'Cliente Anônimo'}</strong>
                       <div className="small">
-                        {renderStars(av.nota)}
+                        {renderStars(av?.estrelas || 0)}
                       </div>
                     </div>
                     <p className="mb-1 small">{av.comentario}</p>
