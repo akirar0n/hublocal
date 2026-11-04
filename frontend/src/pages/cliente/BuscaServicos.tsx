@@ -8,8 +8,9 @@ export const BuscaServicos = () => {
   const [servicos, setServicos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filtros, setFiltros] = useState({
+    termo: '',
     categoria: '',
-    raio: '10',
+    raio: '',
     precoMin: '',
     precoMax: ''
   });
@@ -104,6 +105,12 @@ export const BuscaServicos = () => {
         <Row className="align-items-end g-3">
           <Col md={3}>
             <Form.Group>
+              <Form.Label><i className="bi bi-search me-1" />Buscar por termo</Form.Label>
+              <Form.Control value={filtros.termo} onChange={e => setFiltros({...filtros, termo: e.target.value})} placeholder="Ex: Chuveiro, Pintura..." />
+            </Form.Group>
+          </Col>
+          <Col md={2}>
+            <Form.Group>
               <Form.Label><i className="bi bi-tag me-1" />Categoria</Form.Label>
               <Form.Control value={filtros.categoria} onChange={e => setFiltros({...filtros, categoria: e.target.value})} placeholder="Ex: Eletricista" />
             </Form.Group>
@@ -112,6 +119,7 @@ export const BuscaServicos = () => {
             <Form.Group>
               <Form.Label><i className="bi bi-geo-alt me-1" />Raio</Form.Label>
               <Form.Select value={filtros.raio} onChange={e => setFiltros({...filtros, raio: e.target.value})}>
+                <option value="">Todas</option>
                 <option value="5">5 km</option>
                 <option value="10">10 km</option>
                 <option value="25">25 km</option>
@@ -119,15 +127,15 @@ export const BuscaServicos = () => {
               </Form.Select>
             </Form.Group>
           </Col>
-          <Col md={2}>
+          <Col md={1}>
             <Form.Group>
-              <Form.Label>Preço Mín</Form.Label>
+              <Form.Label>Mín</Form.Label>
               <Form.Control type="number" value={filtros.precoMin} onChange={e => setFiltros({...filtros, precoMin: e.target.value})} placeholder="R$" />
             </Form.Group>
           </Col>
-          <Col md={2}>
+          <Col md={1}>
             <Form.Group>
-              <Form.Label>Preço Máx</Form.Label>
+              <Form.Label>Máx</Form.Label>
               <Form.Control type="number" value={filtros.precoMax} onChange={e => setFiltros({...filtros, precoMax: e.target.value})} placeholder="R$" />
             </Form.Group>
           </Col>

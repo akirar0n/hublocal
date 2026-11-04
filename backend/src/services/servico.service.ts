@@ -86,8 +86,18 @@ export class ServicoService {
   async search(query: any) {
     let servicos = await servicoRepo.findAllAtivos();
 
+    if (query.termo || query.busca || query.q) {
+      const termo = String(query.termo || query.busca || query.q).toLowerCase().trim();
+      servicos = servicos.filter(s =>
+        s.titulo.toLowerCase().includes(termo) ||
+        s.descricao.toLowerCase().includes(termo) ||
+        s.categoria.toLowerCase().includes(termo)
+      );
+    }
+
     if (query.categoria) {
-      servicos = servicos.filter(s => s.categoria.toLowerCase() === String(query.categoria).toLowerCase());
+      const cat = String(query.categoria).toLowerCase().trim();
+      servicos = servicos.filter(s => s.categoria.toLowerCase().includes(cat));
     }
 
     if (query.precoMin) {
@@ -124,7 +134,9 @@ export class ServicoService {
 
     if (query.raio && query.latitude && query.longitude) {
       const raio = Number(query.raio);
-      resultados = resultados.filter(s => s.distanciaKm !== null && s.distanciaKm <= raio);
+      if (!isNaN(raio) && raio > 0) {
+        resultados = resultados.filter(s => s.distanciaKm !== null && s.distanciaKm <= raio);
+      }
     }
 
     resultados.sort((a, b) => {
